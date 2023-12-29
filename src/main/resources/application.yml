@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      jdbc-url: ${USPEAK_DB_URL}
+      username: ${USPEAK_DB_USERNAME}
+      password: ${USPEAK_DB_PASSWORD}
+    url: ${USPEAK_DB_URL}
+server:
+  port: 8090
+redis:
+  password: ${USPEAK_REDIS_PASSWORD}
+  address: ${USPEAK_REDIS_HOST}:${USPEAK_REDIS_PORT}
