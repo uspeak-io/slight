@@ -1,12 +1,13 @@
 package io.uspeak.slight.ephemeral;
 
 import io.uspeak.slight.exception.USpeakException;
-import org.apache.kafka.common.quota.ClientQuotaAlteration;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 
 import java.text.MessageFormat;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class ParticipantStorage extends AbstractStorage<Long, Participant> {
   private final RMap<Long, Participant> map;
@@ -55,5 +56,10 @@ public class ParticipantStorage extends AbstractStorage<Long, Participant> {
   @Override
   public boolean contains(Long aLong) {
     return map.containsKey(aLong);
+  }
+
+  @Override
+  public Set<Map.Entry<Long, Participant>> entries() {
+    return this.map.entrySet();
   }
 }

@@ -5,7 +5,9 @@ import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 
 import java.text.MessageFormat;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class RoomStorage extends AbstractStorage<String, Room> {
   private final RMap<String, Room> map;
@@ -53,5 +55,10 @@ public class RoomStorage extends AbstractStorage<String, Room> {
   @Override
   public boolean contains(String s) {
     return this.map.containsKey(s);
+  }
+
+  @Override
+  public Set<Map.Entry<String, Room>> entries() {
+    return this.map.entrySet();
   }
 }
