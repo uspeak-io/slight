@@ -2,7 +2,10 @@ package io.uspeak.slight.controller;
 
 import com.google.common.base.Preconditions;
 import io.uspeak.slight.clientdto.ActiveRoomsResponse;
+import io.uspeak.slight.clientdto.ParticipantsResponse;
 import io.uspeak.slight.clientdto.RoomConfigRequest;
+import io.uspeak.slight.ephemeral.InRoomService;
+import io.uspeak.slight.ephemeral.Participant;
 import io.uspeak.slight.ephemeral.Room;
 import io.uspeak.slight.ephemeral.RoomCreationInfo;
 import io.uspeak.slight.ephemeral.RoomService;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RoomController {
   private final RoomService roomService;
+  private final InRoomService inRoomService;
 
   @GetMapping("/")
   public ResponseEntity<ActiveRoomsResponse> getActiveRooms() {
@@ -54,5 +59,18 @@ public class RoomController {
     Preconditions.checkNotNull(roomId);
     Preconditions.checkNotNull(userId);
     this.roomService.leave(roomId, userId);
+  }
+
+  @PostMapping("/clear")
+  public void clear() {
+    this.roomService.clear();
+  }
+
+  @GetMapping("/{roomId}/participants")
+  public ResponseEntity<ParticipantsResponse> getParticipants(@PathVariable("roomId") String roomId) {
+    Preconditions.checkNotNull(roomId);
+    List<Participant> participants = this.inRoomService.getParticipants(roomId);
+    ParticipantsResponse participantsResponse = new ParticipantsResponse(participants);
+    return ResponseEntity.ok(participantsResponse);
   }
 }

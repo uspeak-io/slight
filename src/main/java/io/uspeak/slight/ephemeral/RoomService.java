@@ -7,4 +7,5 @@ public interface RoomService {
   void join(String roomId, Long userId);
   void leave(String roomId, Long userId);
   List<Room> getActiveRooms();
+  void clear();
 }

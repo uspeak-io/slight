@@ -1,6 +1,6 @@
 package io.uspeak.slight.ephemeral;
 
-import io.uspeak.slight.exception.USpeakException;
+import io.uspeak.slight.exception.SlightException;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 
@@ -17,17 +17,17 @@ public class ParticipantStorage extends AbstractStorage<Long, Participant> {
   }
 
   @Override
-  public void put(Long aLong, Participant value) throws USpeakException {
+  public void put(Long aLong, Participant value) throws SlightException {
     boolean inserted = map.fastPutIfAbsent(aLong, value);
     if (!inserted) {
-      throw new USpeakException(MessageFormat.format("The key: {0} already exists in name: {1}", aLong, name));
+      throw new SlightException(MessageFormat.format("The key: {0} already exists in name: {1}", aLong, name));
     }
   }
 
   @Override
-  public Participant replace(Long aLong, Participant newValue) throws USpeakException {
+  public Participant replace(Long aLong, Participant newValue) throws SlightException {
     if (!map.containsKey(aLong)) {
-      throw new USpeakException(MessageFormat.format("The key: {0} does not exist in name: {1}", aLong, name));
+      throw new SlightException(MessageFormat.format("The key: {0} does not exist in name: {1}", aLong, name));
     }
     Participant participant = map.get(aLong);
     this.map.fastPutIfExists(aLong, newValue);
@@ -44,9 +44,9 @@ public class ParticipantStorage extends AbstractStorage<Long, Participant> {
   }
 
   @Override
-  public Participant delete(Long aLong) throws USpeakException {
+  public Participant delete(Long aLong) throws SlightException {
     if (!map.containsKey(aLong)) {
-      throw new USpeakException(MessageFormat.format("The key: {0} does not exist in name: {1}", aLong, name));
+      throw new SlightException(MessageFormat.format("The key: {0} does not exist in name: {1}", aLong, name));
     }
     Participant participant = this.map.get(aLong);
     map.remove(aLong);

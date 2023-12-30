@@ -1,8 +1,21 @@
 package io.uspeak.slight.ephemeral;
 
-import org.springframework.security.core.userdetails.User;
+import java.time.Instant;
+import java.util.Objects;
 
-import java.time.LocalDateTime;
+public record Participant(String roomId, Long userId, Boolean isHost, Instant joinedAt) {
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    Participant that = (Participant) o;
+    return Objects.equals(roomId, that.roomId) && Objects.equals(userId, that.userId);
+  }
 
-public record Participant(String roomId, Long userId, LocalDateTime joinedAt) {
+  @Override
+  public int hashCode() {
+    return Objects.hash(roomId, userId);
+  }
 }

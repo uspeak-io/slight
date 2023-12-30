@@ -1,6 +1,6 @@
 package io.uspeak.slight.ephemeral;
 
-import io.uspeak.slight.exception.USpeakException;
+import io.uspeak.slight.exception.SlightException;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 
@@ -17,17 +17,17 @@ public class RoomStorage extends AbstractStorage<String, Room> {
   }
 
   @Override
-  public void put(String s, Room value) throws USpeakException {
+  public void put(String s, Room value) throws SlightException {
     boolean inserted = map.fastPutIfAbsent(s, value);
     if (!inserted) {
-      throw new USpeakException(MessageFormat.format("The key: {0} already exists in name: {1}", s, name));
+      throw new SlightException(MessageFormat.format("The key: {0} already exists in name: {1}", s, name));
     }
   }
 
   @Override
-  public Room replace(String s, Room newValue) throws USpeakException {
+  public Room replace(String s, Room newValue) throws SlightException {
     if (!map.containsKey(s)) {
-      throw new USpeakException(MessageFormat.format("The room: {0} does not exist in name: {1}", s, name));
+      throw new SlightException(MessageFormat.format("The room: {0} does not exist in name: {1}", s, name));
     }
     Room room = map.get(s);
     this.map.fastPutIfExists(s, newValue);
@@ -42,13 +42,13 @@ public class RoomStorage extends AbstractStorage<String, Room> {
   }
 
   @Override
-  public Room delete(String s) throws USpeakException {
+  public Room delete(String s) throws SlightException {
     if (map.containsKey(s)) {
       Room room = map.get(s);
       map.fastRemove(s);
       return room;
     } else {
-      throw new USpeakException(MessageFormat.format("Room with ID: {0} does not exist in name: {1}", s, name));
+      throw new SlightException(MessageFormat.format("Room with ID: {0} does not exist in name: {1}", s, name));
     }
   }
 
