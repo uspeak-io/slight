@@ -1,7 +1,7 @@
 package io.uspeak.slight.ephemeral;
 
-import java.util.List;
+import io.uspeak.slight.Participants;
 
 public interface InRoomService {
-  List<Participant> getParticipants(String roomId);
+  Participants getParticipants(String roomId);
 }

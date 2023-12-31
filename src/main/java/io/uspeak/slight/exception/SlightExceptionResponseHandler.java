@@ -15,6 +15,6 @@ public class SlightExceptionResponseHandler extends ResponseEntityExceptionHandl
   @ExceptionHandler(value = { SlightException.class })
   protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
     String msgBody = ex.getMessage();
-    return handleExceptionInternal(ex, msgBody, new HttpHeaders(), HttpStatus.CONFLICT, request);
+    return handleExceptionInternal(ex, msgBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 }

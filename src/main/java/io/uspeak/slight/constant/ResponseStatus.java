@@ -1,4 +1,4 @@
-package io.uspeak.slight.core;
+package io.uspeak.slight.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

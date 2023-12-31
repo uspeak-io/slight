@@ -1,5 +1,7 @@
 package io.uspeak.slight.core;
 
+import io.uspeak.slight.constant.ResponseStatus;
+
 import javax.annotation.Nullable;
 
 public record SlightResponse<T>(@Nullable T payload, ResponseStatus status, @Nullable Throwable error) {

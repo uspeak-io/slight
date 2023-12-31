@@ -1,6 +1,6 @@
 package io.uspeak.slight.ephemeral;
 
-import io.uspeak.slight.clientdto.RoomConfigRequest;
+import io.uspeak.slight.dto.RoomConfigRequest;
 import lombok.Builder;
 
 @Builder(toBuilder = true)
