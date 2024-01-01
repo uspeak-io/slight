@@ -5,6 +5,7 @@ import io.uspeak.slight.Participants;
 import io.uspeak.slight.dto.ActiveRooms;
 import io.uspeak.slight.dto.CommandResponse;
 import io.uspeak.slight.dto.RoomConfigRequest;
+import io.uspeak.slight.ephemeral.Participant;
 import io.uspeak.slight.ephemeral.Room;
 import io.uspeak.slight.facade.RoomGateway;
 import lombok.RequiredArgsConstructor;
@@ -36,14 +37,14 @@ public class RoomController {
   }
 
   @PostMapping("/join")
-  public CommandResponse<String> joinRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId) {
+  public CommandResponse<Participant> joinRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId) {
     Preconditions.checkNotNull(roomId);
     Preconditions.checkNotNull(userId);
     return roomGateway.joinRoom(roomId, userId);
   }
 
   @PostMapping("/leave")
-  public CommandResponse<String> leaveRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId) {
+  public CommandResponse<Participant> leaveRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId) {
     Preconditions.checkNotNull(roomId);
     Preconditions.checkNotNull(userId);
     return roomGateway.leaveRoom(roomId, userId);

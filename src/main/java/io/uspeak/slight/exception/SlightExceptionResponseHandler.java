@@ -1,5 +1,6 @@
 package io.uspeak.slight.exception;
 
+import io.uspeak.slight.constant.ResponseStatus;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class SlightExceptionResponseHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(value = { SlightException.class })
   protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-    String msgBody = ex.getMessage();
-    return handleExceptionInternal(ex, msgBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    ExceptionResponse exceptionResponse = new ExceptionResponse(ResponseStatus.ERROR, ex.getMessage(), ex);
+    return handleExceptionInternal(ex,exceptionResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
+
+  record ExceptionResponse(ResponseStatus status, String message, Throwable error) { }
 }

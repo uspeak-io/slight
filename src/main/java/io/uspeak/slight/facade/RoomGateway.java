@@ -8,6 +8,7 @@ import io.uspeak.slight.dto.ActiveRooms;
 import io.uspeak.slight.dto.CommandResponse;
 import io.uspeak.slight.dto.RoomConfigRequest;
 import io.uspeak.slight.ephemeral.InRoomService;
+import io.uspeak.slight.ephemeral.Participant;
 import io.uspeak.slight.ephemeral.Room;
 import io.uspeak.slight.ephemeral.RoomCreationInfo;
 import io.uspeak.slight.ephemeral.RoomService;
@@ -37,14 +38,14 @@ public class RoomGateway {
     return new CommandResponse<>(room, RoomCommand.CREATE, Instant.now());
   }
 
-  public CommandResponse<String> joinRoom(String roomId, Long userId) {
-    this.roomService.join(roomId, userId);
-    return new CommandResponse<>(ResponseStatus.OK.getStatus(), RoomCommand.JOIN, Instant.now());
+  public CommandResponse<Participant> joinRoom(String roomId, Long userId) {
+    Participant participant = this.roomService.join(roomId, userId);
+    return new CommandResponse<>(participant, RoomCommand.JOIN, Instant.now());
   }
 
-  public CommandResponse<String> leaveRoom(String roomId, Long userId) {
-    this.roomService.leave(roomId, userId);
-    return new CommandResponse<>(ResponseStatus.OK.getStatus(), RoomCommand.LEAVE, Instant.now());
+  public CommandResponse<Participant> leaveRoom(String roomId, Long userId) {
+    Participant participant = this.roomService.leave(roomId, userId);
+    return new CommandResponse<>(participant, RoomCommand.LEAVE, Instant.now());
   }
 
   public CommandResponse<String> clear() {

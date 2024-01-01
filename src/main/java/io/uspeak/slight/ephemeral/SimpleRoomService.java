@@ -31,7 +31,7 @@ public class SimpleRoomService implements RoomService {
   }
 
   @Override
-  public void join(String roomId, Long userId) {
+  public Participant join(String roomId, Long userId) {
     if (participantStorage.contains(userId)) {
       Optional<Participant> retrieve = participantStorage.get(userId);
       retrieve.ifPresent(e -> {
@@ -41,6 +41,7 @@ public class SimpleRoomService implements RoomService {
           throw new SlightException(MessageFormat.format("User with id: {0}, already in the current room: {1}", userId, roomId));
         }
       });
+      throw new SlightException(MessageFormat.format("User with id: {0} already in a room", userId));
     } else {
       Optional<Room> maybeRoom = roomStorage.get(roomId);
       Room room = maybeRoom.orElseThrow(() -> new SlightException(MessageFormat.format("The room with id: {0} does not exist", roomId)));
@@ -51,6 +52,7 @@ public class SimpleRoomService implements RoomService {
       Room updatedRoom = room.toBuilder().participants(participants).build();
       roomStorage.replace(roomId, updatedRoom);
       addNewOrReplaceParticipant(userId, participant);
+      return participant;
     }
   }
 
@@ -71,7 +73,7 @@ public class SimpleRoomService implements RoomService {
   }
 
   @Override
-  public void leave(String roomId, Long userId) {
+  public Participant leave(String roomId, Long userId) {
     Optional<Room> maybeRoom = roomStorage.get(roomId);
     Room room = maybeRoom.orElseThrow(() -> new SlightException(MessageFormat.format("The room with id: {0} does not exist", roomId)));
     Optional<Participant> maybeParticipant = participantStorage.get(userId);
@@ -83,6 +85,7 @@ public class SimpleRoomService implements RoomService {
     room = room.toBuilder().participants(participants).build();
     roomStorage.replace(roomId, room);
     participantStorage.delete(userId);
+    return participant;
   }
 
   @Override
