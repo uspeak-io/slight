@@ -38,8 +38,8 @@ public class RoomGateway {
     return new CommandResponse<>(room, RoomCommand.CREATE, Instant.now());
   }
 
-  public CommandResponse<Participant> joinRoom(String roomId, Long userId) {
-    Participant participant = this.roomService.join(roomId, userId);
+  public CommandResponse<Participant> joinRoom(String roomId, Long userId, String displayName) {
+    Participant participant = this.roomService.join(roomId, userId, displayName);
     return new CommandResponse<>(participant, RoomCommand.JOIN, Instant.now());
   }
 

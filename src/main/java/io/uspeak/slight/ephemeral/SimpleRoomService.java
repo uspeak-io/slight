@@ -18,6 +18,7 @@ import java.util.Set;
 public class SimpleRoomService implements RoomService {
   private final Storage<String, Room> roomStorage;
   private final Storage<Long, Participant> participantStorage;
+  private final RealtimeMessageService realtimeMessageService;
 
   @Override
   public Room create(RoomCreationInfo creationInfo) {
@@ -31,7 +32,7 @@ public class SimpleRoomService implements RoomService {
   }
 
   @Override
-  public Participant join(String roomId, Long userId) {
+  public Participant join(String roomId, Long userId, String displayName) {
     if (participantStorage.contains(userId)) {
       Optional<Participant> retrieve = participantStorage.get(userId);
       retrieve.ifPresent(e -> {
@@ -47,11 +48,12 @@ public class SimpleRoomService implements RoomService {
       Room room = maybeRoom.orElseThrow(() -> new SlightException(MessageFormat.format("The room with id: {0} does not exist", roomId)));
       Participants participants = room.participants();
       boolean isHost = isHost(userId, roomId);
-      Participant participant = new Participant(roomId, userId, isHost, Instant.now());
+      Participant participant = new Participant(roomId, userId, displayName, isHost, Instant.now());
       participants.add(participant);
       Room updatedRoom = room.toBuilder().participants(participants).build();
       roomStorage.replace(roomId, updatedRoom);
       addNewOrReplaceParticipant(userId, participant);
+      realtimeMessageService.broadcastJoiningParticipant(roomId, participant);
       return participant;
     }
   }
@@ -84,7 +86,8 @@ public class SimpleRoomService implements RoomService {
     Participants participants = room.participants().remove(participant);
     room = room.toBuilder().participants(participants).build();
     roomStorage.replace(roomId, room);
-    participantStorage.delete(userId);
+    Participant p = participantStorage.delete(userId);
+    realtimeMessageService.broadcastLeavingParticipant(roomId, p);
     return participant;
   }
 

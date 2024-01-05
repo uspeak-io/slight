@@ -26,4 +26,5 @@ public class StorageConfig {
     String name = InMemMappings.get(ParticipantStorage.class);
     return new ParticipantStorage(client, name);
   }
+
 }

@@ -37,10 +37,11 @@ public class RoomController {
   }
 
   @PostMapping("/join")
-  public CommandResponse<Participant> joinRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId) {
+  public CommandResponse<Participant> joinRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId, @RequestParam("displayName") String displayName) {
     Preconditions.checkNotNull(roomId);
     Preconditions.checkNotNull(userId);
-    return roomGateway.joinRoom(roomId, userId);
+    Preconditions.checkNotNull(displayName);
+    return roomGateway.joinRoom(roomId, userId, displayName);
   }
 
   @PostMapping("/leave")

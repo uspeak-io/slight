@@ -3,7 +3,7 @@ package io.uspeak.slight.ephemeral;
 import java.time.Instant;
 import java.util.Objects;
 
-public record Participant(String roomId, Long userId, Boolean isHost, Instant joinedAt) {
+public record Participant(String roomId, Long userId, String displayName, Boolean isHost, Instant joinedAt) {
   @Override
   public boolean equals(Object o) {
     if (this == o)
