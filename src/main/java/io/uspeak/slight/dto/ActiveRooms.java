@@ -1,7 +1,6 @@
 package io.uspeak.slight.dto;
 
+import io.uspeak.slight.core.SortableContainer;
 import io.uspeak.slight.ephemeral.Room;
 
-import java.util.List;
-
-public record ActiveRooms(List<Room> rooms) { }
+public record ActiveRooms(SortableContainer<Room> rooms) { }

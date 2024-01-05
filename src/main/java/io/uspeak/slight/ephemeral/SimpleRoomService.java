@@ -1,6 +1,7 @@
 package io.uspeak.slight.ephemeral;
 
 import io.uspeak.slight.Participants;
+import io.uspeak.slight.core.SortableContainer;
 import io.uspeak.slight.core.Storage;
 import io.uspeak.slight.exception.SlightException;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.time.Instant;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -92,12 +92,12 @@ public class SimpleRoomService implements RoomService {
   }
 
   @Override
-  public List<Room> getActiveRooms() {
+  public SortableContainer<Room> getActiveRooms() {
     Set<Map.Entry<String, Room>> entries = this.roomStorage.entries();
     if (entries.isEmpty()) {
-      return List.of();
+      return SortableContainer.ofEmpty();
     }
-    return entries.stream().map(Map.Entry::getValue).toList();
+    return new SortableContainer<>(entries.stream().map(Map.Entry::getValue).toList());
   }
 
   @Override

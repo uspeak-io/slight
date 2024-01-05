@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.uspeak.slight.Participants;
 import io.uspeak.slight.constant.ResponseStatus;
 import io.uspeak.slight.constant.RoomCommand;
+import io.uspeak.slight.core.SortableContainer;
 import io.uspeak.slight.dto.ActiveRooms;
 import io.uspeak.slight.dto.CommandResponse;
 import io.uspeak.slight.dto.RoomConfigRequest;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,7 +26,7 @@ public class RoomGateway {
   private final InRoomService inRoomService;
 
   public CommandResponse<ActiveRooms> getActiveRooms() {
-    List<Room> rooms = roomService.getActiveRooms();
+    SortableContainer<Room> rooms = roomService.getActiveRooms();
     ActiveRooms activeRooms = new ActiveRooms(rooms);
     return new CommandResponse<>(activeRooms, RoomCommand.LIST_ROOMS, Instant.now());
   }
