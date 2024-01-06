@@ -29,6 +29,13 @@ public class RealtimeMessageService {
   }
 
 
+  public <T> void broadcastRoomCreated(T payload) {
+    String path = getPath(RealtimeComponent.ROOMS, "");
+    RealtimeMessageResponse<T> responseMessage = constructResponse(RealtimeComponent.ROOMS, "room", "create", payload);
+    log.info("Broadcast new room created: {} to path: {}", responseMessage, path);
+    simpMessagingTemplate.convertAndSend(path, responseMessage);
+  }
+
   private <T> RealtimeMessageResponse<T>  constructResponse(RealtimeComponent component, String type, String command, T payload) {
     return new RealtimeMessageResponse<>(component, type, command, payload, Instant.now());
   }

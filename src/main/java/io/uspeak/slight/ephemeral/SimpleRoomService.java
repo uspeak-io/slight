@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -28,7 +29,21 @@ public class SimpleRoomService implements RoomService {
     }
     Room room = Room.fromRoomInfo(creationInfo);
     roomStorage.put(room.id(), room);
+    realtimeMessageService.broadcastRoomCreated(room);
     return room;
+  }
+
+  @Override
+  public Room destroy(String roomId, Long userId) {
+    Optional<Room> maybeRoom = roomStorage.get(roomId);
+    Room room = maybeRoom.orElseThrow(() -> new SlightException(MessageFormat.format("Room with id: {0} does not exist", roomId)));
+    List<Participant> participants = room.participants().participants();
+    boolean isHost = participants.stream().anyMatch(e -> e.userId().equals(userId) && e.isHost());
+    if (!isHost) {
+      throw new SlightException(MessageFormat.format("The participant with id: {0} is not the host in room: {1}", userId, roomId));
+    }
+    participants.forEach(p -> participantStorage.delete(p.userId()));
+    return roomStorage.delete(roomId);
   }
 
   @Override
@@ -59,7 +74,7 @@ public class SimpleRoomService implements RoomService {
   }
 
   private void addNewOrReplaceParticipant(Long userId, Participant participant) {
-    if (participantStorage.contains(userId))  {
+    if (participantStorage.contains(userId)) {
       participantStorage.replace(userId, participant);
     } else {
       participantStorage.put(userId, participant);
@@ -103,11 +118,11 @@ public class SimpleRoomService implements RoomService {
   @Override
   public void clear() {
     Set<Map.Entry<Long, Participant>> participantEntries = participantStorage.entries();
-    for(final var e : participantEntries) {
+    for (final var e : participantEntries) {
       this.participantStorage.delete(e.getKey());
     }
     Set<Map.Entry<String, Room>> roomEntries = roomStorage.entries();
-    for(final var e : roomEntries) {
+    for (final var e : roomEntries) {
       this.roomStorage.delete(e.getKey());
     }
   }
