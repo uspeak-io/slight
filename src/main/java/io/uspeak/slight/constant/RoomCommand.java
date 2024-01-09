@@ -11,6 +11,7 @@ public enum RoomCommand {
   LIST_ROOMS("list"),
   CLEAR_ALL("clearAll"),
   LIST_PARTICIPANTS("listParticipants"),
+  END("end"),
   LEAVE("leave");
 
   private final String val;

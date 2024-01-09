@@ -32,23 +32,22 @@ public class RoomController {
 
   @PostMapping("/create")
   public CommandResponse<Room> createRoom(@RequestBody RoomConfigRequest config) {
-    Preconditions.checkNotNull(config);
     return roomGateway.createRoom(config);
   }
 
   @PostMapping("/join")
   public CommandResponse<Participant> joinRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId, @RequestParam("displayName") String displayName) {
-    Preconditions.checkNotNull(roomId);
-    Preconditions.checkNotNull(userId);
-    Preconditions.checkNotNull(displayName);
     return roomGateway.joinRoom(roomId, userId, displayName);
   }
 
   @PostMapping("/leave")
   public CommandResponse<Participant> leaveRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId) {
-    Preconditions.checkNotNull(roomId);
-    Preconditions.checkNotNull(userId);
     return roomGateway.leaveRoom(roomId, userId);
+  }
+
+  @PostMapping("/end")
+  public CommandResponse<Room> endRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") Long userId) {
+    return roomGateway.endRoom(roomId, userId);
   }
 
   @PostMapping("/clear")
@@ -58,7 +57,6 @@ public class RoomController {
 
   @GetMapping("/{roomId}/participants")
   public CommandResponse<Participants> getParticipants(@PathVariable("roomId") String roomId) {
-    Preconditions.checkNotNull(roomId);
     return roomGateway.getParticipants(roomId);
   }
 }

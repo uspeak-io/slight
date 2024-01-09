@@ -32,6 +32,7 @@ public class RoomGateway {
   }
 
   public CommandResponse<Room> createRoom(RoomConfigRequest config) {
+    Preconditions.checkNotNull(config);
     String id = UUID.randomUUID().toString();
     RoomCreationInfo roomCreationInfo = RoomCreationInfo.getFromConfig(id, config);
     Room room = this.roomService.create(roomCreationInfo);
@@ -39,13 +40,25 @@ public class RoomGateway {
   }
 
   public CommandResponse<Participant> joinRoom(String roomId, Long userId, String displayName) {
+    Preconditions.checkNotNull(roomId);
+    Preconditions.checkNotNull(userId);
+    Preconditions.checkNotNull(displayName);
     Participant participant = this.roomService.join(roomId, userId, displayName);
     return new CommandResponse<>(participant, RoomCommand.JOIN, Instant.now());
   }
 
   public CommandResponse<Participant> leaveRoom(String roomId, Long userId) {
+    Preconditions.checkNotNull(roomId);
+    Preconditions.checkNotNull(userId);
     Participant participant = this.roomService.leave(roomId, userId);
     return new CommandResponse<>(participant, RoomCommand.LEAVE, Instant.now());
+  }
+
+  public CommandResponse<Room> endRoom(String roomId, Long userId) {
+    Preconditions.checkNotNull(roomId);
+    Preconditions.checkNotNull(userId);
+    Room room = this.roomService.end(roomId, userId);
+    return new CommandResponse<>(room, RoomCommand.END, Instant.now());
   }
 
   public CommandResponse<String> clear() {

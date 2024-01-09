@@ -34,7 +34,7 @@ public class SimpleRoomService implements RoomService {
   }
 
   @Override
-  public Room destroy(String roomId, Long userId) {
+  public Room end(String roomId, Long userId) {
     Optional<Room> maybeRoom = roomStorage.get(roomId);
     Room room = maybeRoom.orElseThrow(() -> new SlightException(MessageFormat.format("Room with id: {0} does not exist", roomId)));
     List<Participant> participants = room.participants().participants();
