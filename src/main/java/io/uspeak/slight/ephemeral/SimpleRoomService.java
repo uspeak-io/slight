@@ -43,6 +43,7 @@ public class SimpleRoomService implements RoomService {
       throw new SlightException(MessageFormat.format("The participant with id: {0} is not the host in room: {1}", userId, roomId));
     }
     participants.forEach(p -> participantStorage.delete(p.userId()));
+    realtimeMessageService.broadcastRoomEnd(room);
     return roomStorage.delete(roomId);
   }
 
